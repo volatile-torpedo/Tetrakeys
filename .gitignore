@@ -1,0 +1,7 @@
+
+# Ignore all files in the scratch directory
+**/.scratch/*
+
+# Ignore custom directory icon
+desktop.ini
+

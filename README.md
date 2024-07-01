@@ -2,8 +2,6 @@
 
 Reclaim full use of your keyboard by re-purposing the <kbd>CapsLock</kbd> (or any key) into the <kbd>TetraKey!</kbd> modifier.
 
----
-
 ## Introduction
 
 ## Prerequisites
@@ -29,7 +27,6 @@ Not working yet: Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.S
 
 > Due to a Windows limitation, shortcut icons won't display correctly if the folder containing `Tetrakeys.ahk` is not in the %SYSTEMDRIVE% (typically `C:\`). It's strictly a cosmetic issue and does not introduce any functional issues.
 
----
 
 # FAQ
 
@@ -39,4 +36,7 @@ While compiling them into EXEs is a viable option, all it really does is lock th
 **I don't know how to write AHK files, nor am I interested in customizing this inline.**
 I totally understand. I started out in the same situation too. In a future release, the customizations are going to be contained within a configuration file, and then possibly a GUI-based configuration system. Stay tuned.
 
----
+# Credits
+
+# License
+TODO: GNU General Public License v2.0

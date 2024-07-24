@@ -1,4 +1,4 @@
-#Requires AutoHotkey v2.0-a
+#Requires AutoHotkey v2.0
 
 ; Ensure single mutex. Use [Prompt] switch to prompt for options
 #SingleInstance Force
@@ -12,6 +12,12 @@ InstallKeybdHook
 ; InstallMouseHook
 
 ; Include the following libraries
+#Include ".\lib\aux_hotkeys.ahk"
+#Include ".\lib\aux_hotstrings.ahk"
+#Include ".\lib\aux_alerts.ahk"
+#Include ".\lib\aux_hotclix.ahk"
+#include ".\lib\aux_chords.ahk"
+#Include ".\lib\WiseGui.ahk"
 #Include ".\lib\tray_menu.ahk"
 #Include ".\FLOW\lib\aux_hotkeys.ahk"
 #Include ".\FLOW\lib\aux_hotstrings.ahk"
@@ -23,32 +29,21 @@ InstallKeybdHook
 LaunchTime := FormatTime()
 
 /*
-+-----------------------------------+
-|     GLOBAL SCOPE VARIABLES        |
-+-----------------------------------+
+╭────────────────────────╮
+│ GLOBAL SCOPE VARIABLES │
+╰────────────────────────╯
 */
-process_theme := ""
-app_icon := ".\FLOW\icons\icons8-coffeex-to-go.ico"
-tray_icon_normal := ".\FLOW\icons\flow-sl-normal.ico"
-; tray_icon_normal := ".\FLOW\icons\flow-sl-normal-1_1.ico"
-tray_icon_pause_all := ".\FLOW\icons\flow-sl-pause.ico"
-tray_icon_pause_hotkeys := ".\FLOW\icons\flow-sl-pause.ico"
-tray_icon_pause_hotstrings := ".\FLOW\icons\flow-sl-pause-hs.ico"
-tray_icon_suspend := ".\FLOW\icons\flow-sl-suspend.ico"
-; toggle_sound_file_startrun := ".\FLOW\sounds\00_restart.wav"
-; toggle_sound_file_startrun := A_Windir "\Media\Ring06.wav"
-toggle_sound_file_startrun := A_Windir "\Media\Windows Unlock.wav"
-toggle_sound_file_enabled := ".\FLOW\sounds\01_enable.wav"
-toggle_sound_file_disabled := ".\FLOW\sounds\01_disable.wav"
-sound_file_start := ".\FLOW\sounds\start-13691.wav"
-sound_file_stop := ".\FLOW\sounds\stop-13692.wav"
-
-traymenu_icon_checked := ".\FLOW\icons\flow_checked.ico"
-traymenu_icon_unchecked := ".\FLOW\icons\flow_unchecked.ico"
-
-regkey_sticky_keys := "HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys"
+global process_theme := ""
+global app_ico := ".\FLOW\icons\icons8-coffeex-to-go.ico"
+global toggle_sound_file_startrun := A_Windir "\Media\Windows Unlock.wav"
+global toggle_sound_file_enabled := ".\FLOW\sounds\01_enable.wav"
+global toggle_sound_file_disabled := ".\FLOW\sounds\01_disable.wav"
+global sound_file_start := ".\FLOW\sounds\start-13691.wav"
+global sound_file_stop := ".\FLOW\sounds\stop-13692.wav"
+global regkey_sticky_keys := "HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys"
 
 
+DisplayTrayMenu()
 
 DisplayShorcutKeys(ItemName, ItemPos, Tray, Popup_Seconds := 0)
 {
@@ -223,137 +218,6 @@ EndScript(*)
   ExitApp
 }
 
-ToggleAuxHotstrings(*)
-{
-  global Aux_HotStringSupport := !Aux_HotStringSupport
-  if (Aux_HotStringSupport = true) {
-    IndicateToggle("Auxillary HotStrings", "hotkeys", true, true, true)
-    trayitem_toggle_hstrings_icon := traymenu_icon_checked
-  } else {
-    IndicateToggle("Auxillary HotStrings", "hotkeys", false, true, true)
-    trayitem_toggle_hstrings_icon := traymenu_icon_unchecked
-  }
-
-  Tray.SetIcon(trayitem_toggle_hstrings, trayitem_toggle_hstrings_icon)
-}
-
-ToggleAuxHotkeys(*)
-{
-  global Aux_HotKeySupport := !Aux_HotKeySupport
-  if (Aux_HotKeySupport = true) {
-    IndicateToggle("Auxillary HotKeys", "hotstrings", true, true, true)
-    trayitem_toggle_hkeys_icon := traymenu_icon_checked
-  } else {
-    IndicateToggle("Auxillary HotKyes", "hotstrings", false, true, true)
-    trayitem_toggle_hkeys_icon := traymenu_icon_unchecked
-  }
-
-  Tray.SetIcon(trayitem_toggle_hkeys, trayitem_toggle_hkeys_icon)
-}
-
-ToggleRunAtStartup(*)
-{
-
-  ; DEBUG
-  global this_script_shorcut := A_Startup "\" SubStr(A_ScriptName, 1, StrLen(A_ScriptName) - 4) ".lnk"
-  ; MsgBox (
-  ; "A_Startup: " A_Startup
-  ; "`n`nA_ScriptDir: " A_ScriptDir
-  ; "`n`nA_ScriptFullPath: " A_ScriptFullPath
-  ; "`n`nA_ScriptName: " A_ScriptName
-  ; "`n`nA_AhkPath: " A_AhkPath
-  ; "`n`nnSubstring: " SubStr(A_ScriptName, 1, StrLen(A_ScriptName) - 4)
-  ; )
-
-  run A_Startup
-  If (FileExist(this_script_shorcut))
-  {
-    FileDelete(this_script_shorcut)
-    trayitem_runatstartup_icon := traymenu_icon_unchecked
-  }
-  Else
-  {
-    ; ICO issue fixed. See https://learn.microsoft.com/en-us/answers/questions/1162419/shortcut-icon-blank-when-ico-file-is-located-on-a
-    ; RegWrite(1, "REG_DWORD", "HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer", "EnableShellShortcutIconRemotePath" )
-    ; TODO - if ICO is not in C: drive, copy the icon to the C:\temp folder before creating the shortcut
-    FileCreateShortcut(A_AhkPath, this_script_shorcut, A_ScriptDir, A_ScriptFullPath, "A script", A_ScriptDir tray_icon_normal, , ,)
-    trayitem_runatstartup_icon := traymenu_icon_checked
-  }
-  Tray.SetIcon(trayitem_runatstartup, trayitem_runatstartup_icon)
-}
-
-IndicateToggle(FLOWFeatureName, FLOWFeature, IsEnabled := false, DisplayChange := false, PlaySound := false)
-{
-  ; FLOWFeatureName is a string that indicates the FLOW feature being toggled
-
-  ; FLOWFeature is an Evaluated string that indicates the FLOW feature being toggled
-  ; Acceptable values (based on variable names): "hotkeys", "hotstrings", "all"
-
-  ; IsEnabled is a boolean that indicates whether the FLOW feature is enabled or disabled
-  if (Aux_HotStringSupport = false) and (Aux_HotKeySupport = false) {
-    ; Both features are off
-    FLOWFeature := "all"
-    TraySetIcon tray_icon_pause_%FLOWFeature% ; Set the normal icon
-  }
-
-  ; PlaySound parameter is a boolean that indicates whether to play a sound when toggling
-  if (PlaySound = true) {
-    if (IsEnabled = true) {
-      ; SoundPlay toggle_sound_file_enabled
-      SoundPlay "*16"
-    } else {
-      ; SoundPlay toggle_sound_file_disabled
-      SoundPlay "*48"
-    }
-  }
-
-  ; DisplayChange parameter is a boolean that indicates whether to display a message when toggling
-  if (DisplayChange = true) {
-    if (IsEnabled = true) {
-      gui_message := FLOWFeatureName " Enabled"
-      gui_theme := "Success"
-      TraySetIcon tray_icon_normal
-    } else {
-      gui_message := FLOWFeatureName " Disabled"
-      gui_theme := "Warning"
-      TraySetIcon tray_icon_pause_%FLOWFeature%
-    }
-
-    WiseGui(FLOWFeature
-      , "Theme:       " gui_theme
-      , "MainText:    " gui_message
-      , "Transparency: 192"
-      , "Show:         SlideWest@400ms"
-      , "Hide:         SlideEast@400ms"
-      , "Move:         -10, -1"
-      , "Timer:        2500"
-    )
-  }
-}
-
-
-; ToggleTestEnable(*)
-; {
-;   Tray.ToggleEnable("TestToggleEnable")
-; }
-
-; TestDefault(*)
-; {
-;   if Tray.Default = "TestDefault"
-;     Tray.Default := ""
-;   else
-;     Tray.Default := "TestDefault"
-; }
-
-SuspendHotkeys(*)
-{
-  Suspend -1 ; toggle suspend
-
-  if A_IsSuspended = true
-    TraySetIcon ".\FLOW\FLOW_tray_dark_pause.ico"
-  else
-    Tray.Default := "TestDefault"
-}
 
 LaunchCalculator(*)
 {
@@ -423,50 +287,11 @@ LaunchTerminal(*)
 }
 
 
-; ┌───────────────────────────────────────┐
-; │ [LShift]+[RShift]+[t] to run Terminal │
-; └───────────────────────────────────────┘
-; RShift & t::
-; {
-;     ; [LShift]+[RShift]+[t] to run an elevated Terminal process
-;     If GetKeyState("LShift", "P") && GetKeyState("RShift", "P") && GetKeyState("Ctrl", "P")
-;     {
-;         ; MsgBox "Run wt.exe as Admin"
-;         Run "*RunAs wt.exe -w 0 new-tab --title Terminal(Admin) --suppressApplicationTitle"
-;         exit ; return will only exit the current condition
-;     }
+;╭───────────────────────────────────────────────────────╮
+;│  [Ctrl]+[Alt]+[T] for Terminal                        │
+;│  [Ctrl]+[Alt]+[Shift]+[T] for Terminal in Admin Mode  │
+;╰───────────────────────────────────────────────────────╯
 
-;     If GetKeyState("LShift", "P") && GetKeyState("RShift", "P")
-;     {
-;         If WinExist("ahk_exe WindowsTerminal.exe")
-;         {
-;             WinActivate
-;             WinShow
-;             Return
-;         }
-;         Else
-;         {
-;             Run "wt.exe -w 0 new-tab --title Terminal --suppressApplicationTitle", , , &wt_pid
-;             Sleep 1000
-;             If WinExist("ahk_exe WindowsTerminal.exe") or WinExist("ahk_title Terminal")
-;                 {
-;                     WinActivate
-;                     WinShow
-;                 }
-;             Return
-;         }
-;     }
-;     Else
-;     {
-;         Send "T" ; This is to respond to [RShift}+[T]; otherwise, nothing will be sent
-;     }
-; }
-/*
-+-------------------------------------------------------+
-|  [Ctrl]+[Alt]+[T] for Terminal                        |
-|  [Ctrl]+[Alt]+[Shift]+[T] for Terminal in Admin Mode  |
-+-------------------------------------------------------+
-*/
 LAlt & t::
 {
   ; [Ctrl]+[Alt]+[T] to run Terminal
@@ -487,196 +312,79 @@ LAlt & t::
   }
 }
 
-/*
-╭───────────────────────────────────────────────────────────────╮
-│ CAPS LOCK Genius!                                             │
-│
-│ Double tap to toggle the Caps Lock feature.                   │
-│ Hold down the Caps Lock key as a modifier to trigger hotkeys. │
-│                                                               │
-╰───────────────────────────────────────────────────────────────╯
-*/
-; CapsLock:: {
-;   KeyWait "CapsLock" ; Wait forever until Capslock is released.
-;   KeyWait "CapsLock", "D T0.2" ; ErrorLevel = 1 if CapsLock not down within 0.2 seconds.
+;╭─────────────────────────────────────────────────────────╮
+;│  Tetrakey modes & chords                                │
+;│  1. Hit the [CapsLock]+[?] To enter the MODE            │
+;│  2. Hit the other [key] to complete the CHORD           │
+;├─────────────────────────────────────────────────────────┤
+;│  MODES:                                                 │
+;│  [b] BROWSE WEB     Qwik access to fav sites            │
+;│  [o] OPEN APP       Qwik access to apps                 │
+;│  [p] POWERTOYS      Shortcuts to PowerToys utils        │
+;│  [c] CLIP UTILs     Qwik utils on the selected text     │
+;│  [u] UTILITIES      Qwik access to utilities            │
+;├─────────────────────────────────────────────────────────┤
+;│  [QWIKEY]+[O], [b]   OPEN APP: Bitwarden                │
+;│  [QWIKEY]+[O], [c]   OPEN APP: ✓ VS Code                │
+;│  [QWIKEY]+[O], [d]   OPEN APP: Dev Tools                │
+;│  [QWIKEY]+[O], [h]   OPEN APP: Dev Home                 │
+;│  [QWIKEY]+[O], [n]   OPEN APP: ✓ Notepad                │
+;│  [QWIKEY]+[O], [p]   OPEN APP: ✓ Epic Pen               │
+;│  [QWIKEY]+[O], [w]   OPEN APP: Terminal (WSL)           │
+;│                                                         │
+;│  [QWIKEY]+[b], [c]   BROWSE: chat.openai.com            │
+;│  [QWIKEY]+[b], [d]   BROWSE: dev.azure.com              │
+;│  [QWIKEY]+[b], [g]   BROWSE: github.com                 │
+;│  [QWIKEY]+[b], [i]   BROWSE: icons8.com                 │
+;│  [QWIKEY]+[b], [p]   BROWSE: portal.azure.com           │
+;│  [QWIKEY]+[b], [y]   BROWSE: youtube.com                │
+;│                                                         │
+;╰─────────────────────────────────────────────────────────╯
 
-;   if (A_PriorKey = "CapsLock") ; Is a double tap on CapsLock?
-;   {
-;     SetCapsLockState !GetKeyState("CapsLock", "T")
-;   }
-;   return
-; }
-
-;================================================================================================
-; Hot keys with CapsLock modifier. See https://autohotkey.com/docs/Hotkeys.htm#combo
-;================================================================================================
-; Get DEFINITION of selected word.
-; CapsLock & d:: {
-;   ClipboardGet()
-;   Run, http: // www.google.com / search ? q = define + %clipboard% ; Launch with contents of clipboard
-;     ClipboardRestore()
-;     Return
-;       }
-
-;   ; GOOGLE the selected text.
-;   CapsLock & g:: {
-;     ClipboardGet()
-;     Run, http: // www.google.com / search ? q = %clipboard% ; Launch with contents of clipboard
-;       ClipboardRestore()
-;       Return
-;         }
-
-;     ; Do THESAURUS of selected word
-;     CapsLock & t:: {
-;       ClipboardGet()
-;       Run http: // www.thesaurus.com / browse / %Clipboard% ; Launch with contents of clipboard
-;       ClipboardRestore()
-;       Return
-;     }
-
-;     ; Do WIKIPEDIA of selected word
-;     CapsLock & w:: {
-;       ClipboardGet()
-;       Run, https: // en.wikipedia.org / wiki / %clipboard% ; Launch with contents of clipboard
-;       ClipboardRestore()
-;       Return
-;     }
-
-
-;     ClipboardGet()
-;     {
-;       OldClipboard := ClipboardAll ;Save existing clipboard.
-;       Clipboard := ""
-;       Send, ^ c ;Copy selected test to clipboard
-;       ClipWait 0
-;       If ErrorLevel
-;       {
-;         MsgBox, No Text Selected !
-;           Return
-;       }
-;     }
-
-;     ClipboardRestore()
-;     {
-;       Clipboard := OldClipboard
-;     }
-
-/*
-╭────────────────────────────╮
-│  QWIK KEYS (QWIKEY)        │
-│  [Ctrl]+[Alt]+[Win] + [?]  │
-├────────────────────────────┴───────────────────────╮
-│  [QWIKEY]+[K]    Toggle Aux Hotkeys                │
-│  [QWIKEY]+[S]    Toggle Aux Hotsrings              │
-│  [QWIKEY]+[R]    Reload this app                   │
-│  [QWIKEY]+[E]    Edit this AHK (default editor)    │
-│  [QWIKEY]+[F2]   AutoHotKey Help File              │
-╰────────────────────────────────────────────────────╯
-*/
-; [Ctrl]+[Alt]+[Win]+[K]: Toggle Aux Hotkeys
-^#!k:: {
-  ToggleAuxHotkeys()
-}
-
-; [Ctrl]+[Alt]+[Win]+[S]: Toggle Aux Hotstrings
-^#!s:: {
-  ToggleAuxHotstrings()
-}
-
-; [Ctrl]+[Alt]+[Win]+[R] to Reload this script
-^#!r:: {
-  ReloadAndReturn()
-}
-
-; [Ctrl]+[Alt]+[Win]+[E] to edit this script
-^!#e:: {
-  EditAndReturn()
-}
-
-; [Ctrl]+[Alt]+[Win]+[F2] to open the AutoHotkey Help File
-^!#F2:: {
-  ShowHelp()
-}
-
-; [Ctrl]+[Alt]+[Win]+[F12] to go to sleep mode
-^!#F12:: {
-  Run "rundll32.exe powrprof.dll,SetSuspendState 0,1,0"
-}
-
-/*
-╭───────────────────────────────────────────────────────╮
-│  QWIKEY modes & chords                                │
-│  Hit the [QWIKEY]+[?] To enter the MODE, then         │
-│  follow it with another key to complete the CHORD.    │
-├───────────────────────────────────────────────────────┤
-│  MODES:                                               │
-│  [b] BROWSE WEB     Qwik access to fav sites          │
-│  [o] OPEN APP       Qwik access to apps               │
-│  [p] POWERTOYS      Shortcuts to PowerToys utils      │
-│  [c] CLIP UTILs     Qwik utils on the selected text   │
-│  [u] UTILITIES      Qwik access to utilities          │
-├───────────────────────────────────────────────────────┤
-│  [QWIKEY]+[O], [b]   OPEN APP: Bitwarden              │
-│  [QWIKEY]+[O], [c]   OPEN APP: ✓ VS Code              │
-│  [QWIKEY]+[O], [d]   OPEN APP: Dev Tools              │
-│  [QWIKEY]+[O], [h]   OPEN APP: Dev Home               │
-│  [QWIKEY]+[O], [n]   OPEN APP: ✓ Notepad              │
-│  [QWIKEY]+[O], [p]   OPEN APP: ✓ Epic Pen             │
-│  [QWIKEY]+[O], [w]   OPEN APP: Terminal (WSL)         │
-│                                                       │
-│  [QWIKEY]+[b], [c]   BROWSE: chat.openai.com          │
-│  [QWIKEY]+[b], [d]   BROWSE: dev.azure.com            │
-│  [QWIKEY]+[b], [g]   BROWSE: github.com               │
-│  [QWIKEY]+[b], [i]   BROWSE: icons8.com               │
-│  [QWIKEY]+[b], [p]   BROWSE: portal.azure.com         │
-│  [QWIKEY]+[b], [y]   BROWSE: youtube.com              │
-│                                                       │
-╰───────────────────────────────────────────────────────╯
-*/
 
 ; ╭────────────────────────────────╮
-; │  [QWIKEY]+[O]. OPEN App Mode   │
+; │  [Tetra]+[O]. OPEN App Mode    │
 ; ╰────────────────────────────────╯
-LAlt & o::
-{
-  If GetKeyState("LCtrl", "P") && GetKeyState("LAlt", "P")
-  {
-    ; Open App Mode, then follow it with another key to complete the CHORD
-    retKeyHook := KeyWaitAny()
-
-    Switch retKeyHook
-    {
-      Case "b":
-        Run "bitwarden"
-      Case "c":
-        Run "code.cmd"
-      Case "n":
-        Run "notepad.exe"
-      Case "o":
-      Case "p":
-        Run EnvGet("ProgramFiles(x86)") "\Epic Pen\EpicPen.exe"
-      Case "D":
-        Run "devtools"
-      Case "H":
-        Run "devhome"
-      Default:
-        ; do nothing
-    }
-  }
-  Else
-  {
-    Send "O" ; This is to respond to [LShift}+[o]; otherwise, nothing will be sent
-  }
-}
-
 KeyWaitAny(*)
 {
-  ih := InputHook("B L1 T2.5", "{Esc}{Enter}{Tab}")
-  ih.KeyOpt("{All}", "E")  ; End
+  ih := InputHook("B L1 T4 M", "{Esc}{Enter}{Tab}")
+  ih.KeyOpt("abcdefghijklmnopqrstuvwxyz1234567890", "E")  ; End
   ih.Start()
   ih.Wait()
 
   return ih.EndKey  ; Return the key name
+}
+
+CapsLock & o::
+{
+  ; If GetKeyState("CapsLock", "P")
+  ; {
+  ;   ; Open App Mode, then follow it with another key to complete the CHORD
+  retKeyHook := KeyWaitAny()
+  MsgBox "You pressed " retKeyHook, "Tetrakeys", "T5 4096"
+  Switch retKeyHook
+  {
+    Case "b":
+      Run "bitwarden"
+    Case "c":
+      Run "code.cmd"
+    Case "n":
+      Run "notepad.exe"
+    Case "o":
+    Case "p":
+      Run EnvGet("ProgramFiles(x86)") "\Epic Pen\EpicPen.exe"
+    Case "D":
+      Run "devtools"
+    Case "H":
+      Run "devhome"
+    Default:
+      ; do nothing
+  }
+  ; }
+  ; Else
+  ; {
+  ;   Send "O" ; This is to respond to [LShift}+[o]; otherwise, nothing will be sent
+  ; }
 }
 
 ; [Win]+[F] to open the File Explorer in the user's Documents folder

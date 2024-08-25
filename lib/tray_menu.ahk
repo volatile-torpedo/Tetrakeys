@@ -98,10 +98,6 @@ DisplayTrayMenu()
   trayitem_toggle_hkeys := "Aux Hot&Keys`t[Ctrl+Win+Alt]+[K]"
   trayitem_toggle_hkeys_icon := traymenu_icon_checked
 
-  ; trayitem_runatstartup := "Run at Startup"
-
-  ; trayitem_runatstartup_icon := traymenu_icon_unchecked
-
   trayitem_debug := "Debug Tools"
   trayitem_debug_icon := ".\FLOW\icons\flow_debug.ico"
 

@@ -16,7 +16,7 @@ InstallKeybdHook
 #Include ".\lib\aux_hotstrings.ahk"
 #Include ".\lib\aux_alerts.ahk"
 #Include ".\lib\aux_hotclix.ahk"
-#include ".\lib\aux_chords.ahk"
+#include ".\lib\aux_modes.ahk"
 #Include ".\lib\WiseGui.ahk"
 #Include ".\lib\tray_menu.ahk"
 #Include ".\FLOW\lib\aux_hotkeys.ahk"
@@ -312,34 +312,34 @@ LAlt & t::
   }
 }
 
-;╭─────────────────────────────────────────────────────────╮
-;│  Tetrakey modes & chords                                │
-;│  1. Hit the [CapsLock]+[?] To enter the MODE            │
-;│  2. Hit the other [key] to complete the CHORD           │
-;├─────────────────────────────────────────────────────────┤
-;│  MODES:                                                 │
-;│  [b] BROWSE WEB     Qwik access to fav sites            │
-;│  [o] OPEN APP       Qwik access to apps                 │
-;│  [p] POWERTOYS      Shortcuts to PowerToys utils        │
-;│  [c] CLIP UTILs     Qwik utils on the selected text     │
-;│  [u] UTILITIES      Qwik access to utilities            │
-;├─────────────────────────────────────────────────────────┤
-;│  [QWIKEY]+[O], [b]   OPEN APP: Bitwarden                │
-;│  [QWIKEY]+[O], [c]   OPEN APP: ✓ VS Code                │
-;│  [QWIKEY]+[O], [d]   OPEN APP: Dev Tools                │
-;│  [QWIKEY]+[O], [h]   OPEN APP: Dev Home                 │
-;│  [QWIKEY]+[O], [n]   OPEN APP: ✓ Notepad                │
-;│  [QWIKEY]+[O], [p]   OPEN APP: ✓ Epic Pen               │
-;│  [QWIKEY]+[O], [w]   OPEN APP: Terminal (WSL)           │
-;│                                                         │
-;│  [QWIKEY]+[b], [c]   BROWSE: chat.openai.com            │
-;│  [QWIKEY]+[b], [d]   BROWSE: dev.azure.com              │
-;│  [QWIKEY]+[b], [g]   BROWSE: github.com                 │
-;│  [QWIKEY]+[b], [i]   BROWSE: icons8.com                 │
-;│  [QWIKEY]+[b], [p]   BROWSE: portal.azure.com           │
-;│  [QWIKEY]+[b], [y]   BROWSE: youtube.com                │
-;│                                                         │
-;╰─────────────────────────────────────────────────────────╯
+; ╭─────────────────────────────────────────────────────────╮
+; │  Tetrakey modes & chords                                │
+; │  1. Hit the [CapsLock]+[?] To enter the MODE            │
+; │  2. Hit the other [key] to complete the CHORD           │
+; ├─────────────────────────────────────────────────────────┤
+; │  MODES:                                                 │
+; │  [b] BROWSE WEB     Qwik access to fav sites            │
+; │  [o] OPEN APP       Qwik access to apps                 │
+; │  [p] POWERTOYS      Shortcuts to PowerToys utils        │
+; │  [c] CLIP UTILs     Qwik utils on the selected text     │
+; │  [u] UTILITIES      Qwik access to utilities            │
+; ├─────────────────────────────────────────────────────────┤
+; │  [QWIKEY]+[O], [b]   OPEN APP: Bitwarden                │
+; │  [QWIKEY]+[O], [c]   OPEN APP: ✓ VS Code                │
+; │  [QWIKEY]+[O], [d]   OPEN APP: Dev Tools                │
+; │  [QWIKEY]+[O], [h]   OPEN APP: Dev Home                 │
+; │  [QWIKEY]+[O], [n]   OPEN APP: ✓ Notepad                │
+; │  [QWIKEY]+[O], [p]   OPEN APP: ✓ Epic Pen               │
+; │  [QWIKEY]+[O], [w]   OPEN APP: Terminal (WSL)           │
+; │                                                         │
+; │  [QWIKEY]+[b], [c]   BROWSE: chat.openai.com            │
+; │  [QWIKEY]+[b], [d]   BROWSE: dev.azure.com              │
+; │  [QWIKEY]+[b], [g]   BROWSE: github.com                 │
+; │  [QWIKEY]+[b], [i]   BROWSE: icons8.com                 │
+; │  [QWIKEY]+[b], [p]   BROWSE: portal.azure.com           │
+; │  [QWIKEY]+[b], [y]   BROWSE: youtube.com                │
+; │                                                         │
+; ╰─────────────────────────────────────────────────────────╯
 
 
 ; ╭────────────────────────────────╮
@@ -347,8 +347,8 @@ LAlt & t::
 ; ╰────────────────────────────────╯
 KeyWaitAny(*)
 {
-  ih := InputHook("B L1 T4 M", "{Esc}{Enter}{Tab}")
-  ih.KeyOpt("abcdefghijklmnopqrstuvwxyz1234567890", "E")  ; End
+  ih := InputHook("B L1 T4 M", "abcdefghijklmnopqrstuvwxyz12345678900")
+  ih.KeyOpt("{All}", "E")  ; End
   ih.Start()
   ih.Wait()
 
@@ -360,6 +360,7 @@ CapsLock & o::
   ; If GetKeyState("CapsLock", "P")
   ; {
   ;   ; Open App Mode, then follow it with another key to complete the CHORD
+  KeyWait "CapsLock"
   retKeyHook := KeyWaitAny()
   MsgBox "You pressed " retKeyHook, "Tetrakeys", "T5 4096"
   Switch retKeyHook
@@ -391,3 +392,20 @@ CapsLock & o::
 #f:: {
   Run "explorer.exe ~"
 }
+
+CapsLock & n:: {
+  MsgBox "Hello, World!"
+}
+
+CapsLock & F1:: F23
+CapsLock & F2:: F24
+CapsLock & F3:: F13
+CapsLock & F4:: F14
+CapsLock & F5:: F15
+CapsLock & F6:: F16
+CapsLock & F7:: F17
+CapsLock & F8:: F18
+CapsLock & F9:: F19
+CapsLock & F10:: F20
+CapsLock & F11:: F21
+CapsLock & F12:: F22

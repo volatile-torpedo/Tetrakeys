@@ -1,6 +1,11 @@
 # Tetrakeys
 
-Reclaim full use of your keyboard by re-purposing the <kbd>CapsLock</kbd> (or any key) into the <kbd>TetraKey!</kbd> modifier.
+Promote a more efficient workflow by reclaiming the <kbd>CapsLock</kbd> key as a modifier key for your keyboard shortcuts.
+
+Tetrakeys is a little more than just a simple AutoHotkey script. It's the beginning of an extensible platform that allows you to
+customize your workflow. A library of extensions will be released and they may have their own release schedule. This ensures that
+the project can continually release without affecting each other.
+
 
 
 ## Prerequisites

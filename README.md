@@ -6,8 +6,6 @@ Tetrakeys is a little more than just a simple AutoHotkey script. It's the beginn
 customize your workflow. A library of extensions will be released and they may have their own release schedule. This ensures that
 the project can continually release without affecting each other.
 
-
-
 ## Prerequisites
 
 1. This project is for Windows only. MacOS support is in the works, but if you want something similar, look into a DIY approach with Karabiner Elements.
@@ -25,13 +23,13 @@ Open a Command Prompt, or a PowerShell window, and run the following command:
 Not working yet: Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://thisproject/install.ps1'))
 ```
 
-1. Clone this repo (or download and extract the contents of the project from the [Releases](https://github.com/volatile-torpedo/Tetrakeys/tags/latest) page) into a target directory of your choice, but preferrably somewhere in your user profile so you can easily make your customizations. 
+1. Clone this repo (or download and extract the contents of the project from the [Releases](https://github.com/volatile-torpedo/Tetrakeys/tags/latest) page) into a target directory of your choice, but preferrably somewhere in your user profile so you can easily make your customizations.
 2. Run the `setup.ps1` file. This will install AutoHotkey into the extracted directory if it can't be detected. This will then launch Tetrakeys
 
 > Due to a Windows limitation, shortcut icons won't display correctly if the folder containing `Tetrakeys.ahk` is not in the %SYSTEMDRIVE% (typically `C:\`). It's strictly a cosmetic issue and does not introduce any functional issues.
 
-
 ## Acknowledgements
+
 | Resources | Credit To | Comments |
 | :----------- | :----------- | :----------- |
 | Icons | [Icons8](https://icons8.com) | Right Content |

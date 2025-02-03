@@ -12,18 +12,14 @@ InstallKeybdHook
 ; InstallMouseHook
 
 ; Include the following libraries
-#Include ".\lib\aux_hotkeys.ahk"
-#Include ".\lib\aux_hotstrings.ahk"
-#Include ".\lib\aux_alerts.ahk"
-#Include ".\lib\aux_hotclix.ahk"
-#include ".\lib\aux_modes.ahk"
+#Include ".\lib\_about.ahk"
+#Include ".\lib\_traymenu.tetra"
+#Include ".\lib\_hotkeys.tetra"
+#Include ".\lib\_hotstrings.tetra"
+#Include ".\lib\_alerts.tetra"
+#Include ".\lib\_tetraclick.tetra"
+#include ".\lib\_modes.tetra"
 #Include ".\lib\WiseGui.ahk"
-#Include ".\lib\tray_menu.ahk"
-#Include ".\FLOW\lib\aux_hotkeys.ahk"
-#Include ".\FLOW\lib\aux_hotstrings.ahk"
-#Include ".\FLOW\lib\aux_alerts.ahk"
-#Include ".\FLOW\lib\aux_hotclix.ahk"
-#Include ".\FLOW\lib\WiseGui.ahk"
 
 ; Get Launch/Reload Time
 LaunchTime := FormatTime()
@@ -34,7 +30,7 @@ LaunchTime := FormatTime()
 ╰────────────────────────╯
 */
 global process_theme := ""
-global app_ico := ".\FLOW\icons\icons8-coffeex-to-go.ico"
+global app_ico := ".\FLOW\icons\leaf.ico"
 global toggle_sound_file_startrun := A_Windir "\Media\Windows Unlock.wav"
 global toggle_sound_file_enabled := ".\FLOW\sounds\01_enable.wav"
 global toggle_sound_file_disabled := ".\FLOW\sounds\01_disable.wav"
@@ -155,52 +151,6 @@ DisplayShorcutKeys(ItemName, ItemPos, Tray, Popup_Seconds := 0)
   }
 }
 
-
-DisplayAbout(*)
-{
-  ; MsgBox "You selected " ItemName " (position " ItemPos ")"
-  HelpMessage := "
-    (
-        [CTRL]+[ALT]+[WIN]+[R]::`treload this script`n
-        [CTRL]+[ALT]+[Win]+[E]::`tedit this script`n
-        [CTRL]+[Win]+[B]::`tinsert a bullet point in any document`n
-        [LShift]+[RShift]+[T]::`trun Terminal`n
-        [LShift]+[RShift]+[CTRL]+[T]::`trun Terminal as Admin`n
-        [LShift]+[RShift]+[N]::`trun Notepad `n
-    )"
-  MsgBox HelpMessage, "FLOW Shortcut Keys"
-}
-
-ShowListLines(*)
-{
-  ListLines
-}
-
-OpenScriptDir(*)
-{
-  Run A_ScriptDir
-}
-
-ShowHelp(*)
-{
-  ; Open the regular help file
-  ; Determine AutoHotkey's location:
-  if A_AhkPath
-    SplitPath A_AhkPath, , &ahk_dir
-  else if FileExist("..\..\AutoHotkey.chm")
-    ahk_dir := "..\.."
-  else if FileExist(A_ProgramFiles "\AutoHotkey\AutoHotkey.chm")
-    ahk_dir := A_ProgramFiles "\AutoHotkey"
-  else
-  {
-    MsgBox "Could not find the AutoHotkey folder."
-    return
-  }
-  Run ahk_dir "\AutoHotkey.chm"
-  ; Run A_ProgramFiles "\AutoHotkey\v2\AutoHotkey.chm"
-
-  Return
-}
 ReloadAndReturn(*)
 {
   Reload
@@ -254,6 +204,33 @@ LaunchTerminal(*)
       WinShow
     }
     Return
+  }
+}
+
+LaunchNotion(*) {
+  ; Path to Notion.exe
+  static notionIconPath := RegRead("HKCU\Software\Microsoft\Windows\CurrentVersion\Uninstall\661f0cc6-343a-59cb-a5e8-8f6324cc6998", "DisplayIcon")
+  static notionPath := SubStr(notionIconPath, 1, InStr(notionIconPath, ",") - 1)
+  If WinExist("ahk_exe Notion.exe")
+  {
+    WinActivate
+    SoundPlay sound_file_start
+    WinShow
+    Return
+  }
+  Else
+  {
+    If FileExist(notionPath)
+    {
+      Run notionPath
+      ; SoundPlay "*48"
+      Return
+    }
+    Else
+    {
+      SoundPlay sound_file_stop
+      Return
+    }
   }
 }
 
@@ -311,6 +288,46 @@ LAlt & t::
     Send "T" ; This is to respond to [RShift}+[T]; otherwise, nothing will be sent
   }
 }
+; ╭────────────────────────────╮
+; │  QWIK KEYS (QWIKEY)        │
+; │  [Ctrl]+[Alt]+[Win] + [?]  │
+; ├────────────────────────────┴───────────────────────╮
+; │  [QWIKEY]+[K]    Toggle Aux Hotkeys                │
+; │  [QWIKEY]+[S]    Toggle Aux Hotsrings              │
+; │  [QWIKEY]+[R]    Reload this app                   │
+; │  [QWIKEY]+[E]    Edit this AHK (default editor)    │
+; │  [QWIKEY]+[F2]   AutoHotKey Help File              │
+; ╰────────────────────────────────────────────────────╯
+
+; [Ctrl]+[Alt]+[Win]+[K]: Toggle Aux Hotkeys
+^#!k:: {
+  ToggleAuxHotkeys()
+}
+
+; [Ctrl]+[Alt]+[Win]+[S]: Toggle Aux Hotstrings
+^#!s:: {
+  ToggleAuxHotstrings()
+}
+
+; [Ctrl]+[Alt]+[Win]+[R] to Reload this script
+^#!r:: {
+  ReloadAndReturn()
+}
+
+; [Ctrl]+[Alt]+[Win]+[E] to edit this script
+^!#e:: {
+  EditAndReturn()
+}
+
+; [Ctrl]+[Alt]+[Win]+[F2] to open the AutoHotkey Help File
+^!#F2:: {
+  ShowHelp()
+}
+
+; [Ctrl]+[Alt]+[Win]+[F12] to go to sleep mode
+^!#F12:: {
+  Run "rundll32.exe powrprof.dll,SetSuspendState 0,1,0"
+}
 
 ; ╭─────────────────────────────────────────────────────────╮
 ; │  Tetrakey modes & chords                                │
@@ -362,7 +379,7 @@ CapsLock & o::
   ;   ; Open App Mode, then follow it with another key to complete the CHORD
   KeyWait "CapsLock"
   retKeyHook := KeyWaitAny()
-  MsgBox "You pressed " retKeyHook, "Tetrakeys", "T5 4096"
+  MsgBox "You pressed " retKeyHook, "Tetrakeys", "T2 4096"
   Switch retKeyHook
   {
     Case "b":
@@ -370,7 +387,7 @@ CapsLock & o::
     Case "c":
       Run "code.cmd"
     Case "n":
-      Run "notepad.exe"
+      LaunchNotion()
     Case "o":
     Case "p":
       Run EnvGet("ProgramFiles(x86)") "\Epic Pen\EpicPen.exe"
@@ -393,9 +410,7 @@ CapsLock & o::
   Run "explorer.exe ~"
 }
 
-CapsLock & n:: {
-  MsgBox "Hello, World!"
-}
+CapsLock & p:: PrintScreen
 
 CapsLock & F1:: F23
 CapsLock & F2:: F24

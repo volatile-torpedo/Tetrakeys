@@ -3,7 +3,8 @@
 ; ╭───────────╮
 ; │ VARIABLES │
 ; ╰───────────╯
-tray_icon_normal            := ".\FLOW\icons\flow-sl-normal.ico"
+; tray_icon_normal            := ".\FLOW\icons\flow-sl-normal.ico"
+tray_icon_normal            := ".\FLOW\icons\leaf\myleaf.ico"
 tray_icon_pause_all         := ".\FLOW\icons\flow-sl-pause.ico"
 tray_icon_pause_hotkeys     := ".\FLOW\icons\flow-sl-pause.ico"
 tray_icon_pause_hotstrings  := ".\FLOW\icons\flow-sl-pause-hs.ico"
@@ -12,11 +13,11 @@ traymenu_icon_checked       := ".\FLOW\icons\flow_checked.ico"
 traymenu_icon_unchecked     := ".\FLOW\icons\flow_unchecked.ico"
 
 ; custom tray menu items
-trayitem_flow_ref             := "FLOW Shortcut Keys"
+trayitem_flow_ref             := "Tetrakeys Shortcut Keys"
 trayitem_flow_ref_ico         := ".\FLOW\icons\flow-sl-normal.ico"
 trayitem_flow_ref_ico         := ".\FLOW\icons\flow_keeb.ico"
 trayitem_about                := "About FLOW Streamline"
-trayitem_about_ico            := ".\FLOW\icons\flow-sl-normal.ico"
+trayitem_about_ico            := tray_icon_normal
 trayitem_reload               := "&Reload Script`t[Ctrl+Win+Alt]+[R]"
 trayitem_reload_ico           := ".\FLOW\icons\flow_reload.ico"
 trayitem_toggle_hstrings      := "Aux Hot&Strings`t[Ctrl+Win+Alt]+[S]"
@@ -80,47 +81,6 @@ DisplayTrayMenu()
   ; Delete the standard items. Not Required unless replacing
   Tray.Delete()
 
-  ; Create custom tray menu items
-  trayitem_flow_ref := "FLOW Shortcut Keys"
-  trayitem_flow_ref_icon := ".\FLOW\icons\flow-sl-normal.ico"
-  trayitem_flow_ref_icon := ".\FLOW\icons\flow_keeb.ico"
-
-  trayitem_about := "About FLOW Streamline"
-  trayitem_about_icon := ".\FLOW\icons\flow-sl-normal.ico"
-  ; trayitem_about_icon := ".\FLOW\icons\flow_coffee2go.ico"
-
-  trayitem_reload := "&Reload Script`t[Ctrl+Win+Alt]+[R]"
-  trayitem_reload_icon := ".\FLOW\icons\flow_reload.ico"
-
-  trayitem_toggle_hstrings := "Aux Hot&Strings`t[Ctrl+Win+Alt]+[S]"
-  trayitem_toggle_hstrings_icon := traymenu_icon_checked
-
-  trayitem_toggle_hkeys := "Aux Hot&Keys`t[Ctrl+Win+Alt]+[K]"
-  trayitem_toggle_hkeys_icon := traymenu_icon_checked
-
-  trayitem_debug := "Debug Tools"
-  trayitem_debug_icon := ".\FLOW\icons\flow_debug.ico"
-
-  trayitem_ahkhelp := "AutoHotkey Help`t[Ctrl+Win+Alt]+[F2]"
-  trayitem_ahkhelp_icon := ".\FLOW\icons\flow_help.ico"
-
-  trayitem_exit := "E&xit FLOW Streamline"
-  trayitem_exit_icon := ".\FLOW\icons\flow_stop.ico"
-
-  trayitem_edit := "E&dit Script`t[Ctrl+Win+Alt]+[E]"
-  trayitem_edit_icon := ".\FLOW\icons\flow_edit.ico"
-
-  trayitem_runatstartup := "Run at Startup"
-  global this_script_shorcut := A_Startup "\" SubStr(A_ScriptName, 1, StrLen(A_ScriptName) - 4) ".lnk"
-  If (FileExist(this_script_shorcut))
-  {
-    trayitem_runatstartup_icon := traymenu_icon_checked
-  }
-  Else
-  {
-    trayitem_runatstartup_icon := traymenu_icon_unchecked
-  }
-
   ; Define the menu items
   Tray.Add(trayitem_flow_ref, DisplayShorcutKeys)
   Tray.SetIcon(trayitem_flow_ref, trayitem_flow_ref_ico)
@@ -154,13 +114,13 @@ DisplayTrayMenu()
   DebugMenu.Add("Key & Mouse Button History", ShowListLines)
   DebugMenu.Add("Coming: KeyHistory", ShowListLines)
   DebugMenu.Disable("Coming: KeyHistory")
-  DebugMenu.Add("Coming: ListHotKeys", ShowListLines)
-  DebugMenu.Disable("Coming: ListHotKeys")
+  DebugMenu.Add("List Hotkeys", ListSimpleHotkeys)
+  ; DebugMenu.Disable("Coming: ListHotKeys")
   DebugMenu.Add("Coming: ListVars", ShowListLines)
   DebugMenu.Disable("Coming: ListVars")
   DebugMenu.Add("Coming: WindowsSpy", ShowListLines)
   DebugMenu.Disable("Coming: WindowsSpy")
-  DebugMenu.Add("Coming: Browse This Directory", OpenScriptDir)
+  DebugMenu.Add("Open script folder", OpenScriptDir)
 
   Tray.Add(trayitem_ahkhelp, ShowHelp)
   Tray.SetIcon(trayitem_ahkhelp, trayitem_ahkhelp_ico)
@@ -326,4 +286,75 @@ SuspendHotkeys(*)
     TraySetIcon ".\FLOW\FLOW_tray_dark_pause.ico"
   else
     Tray.Default := "TestDefault"
+}
+
+/*
+╭────────────────╮
+│ ShowListLines  │
+╰────────────────╯ */
+ShowListLines(*)
+{
+  ListLines
+}
+
+/*
+╭────────────────────╮
+│ ListSimpleHotkeys  │
+╰────────────────────╯ */
+ListSimpleHotkeys(*)
+{
+  ListHotkeys
+}
+
+/*
+╭──────────────╮
+│ DisplayAbout │
+╰──────────────╯ */
+DisplayAbout(*)
+{
+  ; MsgBox "You selected " ItemName " (position " ItemPos ")"
+  HelpMessage := "
+    (
+        [CTRL]+[ALT]+[WIN]+[R]::`treload this script`n
+        [CTRL]+[ALT]+[Win]+[E]::`tedit this script`n
+        [CTRL]+[Win]+[B]::`tinsert a bullet point in any document`n
+        [LShift]+[RShift]+[T]::`trun Terminal`n
+        [LShift]+[RShift]+[CTRL]+[T]::`trun Terminal as Admin`n
+        [LShift]+[RShift]+[N]::`trun Notepad `n
+    )"
+  MsgBox HelpMessage, "FLOW Shortcut Keys"
+}
+
+/*
+╭───────────────╮
+│ OpenScriptDir │
+╰───────────────╯ */
+OpenScriptDir(*)
+{
+  Run A_ScriptDir
+}
+
+/*
+╭──────────╮
+│ ShowHelp │
+╰──────────╯ */
+ShowHelp(*)
+{
+  ; Open the regular help file
+  ; Determine AutoHotkey's location:
+  if A_AhkPath
+    SplitPath A_AhkPath, , &ahk_dir
+  else if FileExist("..\..\AutoHotkey.chm")
+    ahk_dir := "..\.."
+  else if FileExist(A_ProgramFiles "\AutoHotkey\AutoHotkey.chm")
+    ahk_dir := A_ProgramFiles "\AutoHotkey"
+  else
+  {
+    MsgBox "Could not find the AutoHotkey folder."
+    return
+  }
+  Run ahk_dir "\AutoHotkey.chm"
+  ; Run A_ProgramFiles "\AutoHotkey\v2\AutoHotkey.chm"
+
+  Return
 }

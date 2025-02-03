@@ -145,7 +145,7 @@ DisplayTrayMenu()
   ; Set the default menu item for double-clicking the tray icon
   Tray.Default := trayitem_flow_ref
 
-  ; Make the tray menu show when the tray icon is also left-clicked
+  ; Make the tray menu when the tray icon is also left-clicked
   OnMessage 0x404, Received_AHK_NOTIFYICON
   Received_AHK_NOTIFYICON(wParam, lParam, nMsg, hwnd) {
     if lParam = 0x202 { ; WM_LBUTTONUP

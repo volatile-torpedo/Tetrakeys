@@ -3,35 +3,35 @@
 ; ╭───────────╮
 ; │ VARIABLES │
 ; ╰───────────╯
-; tray_icon_normal            := ".\FLOW\icons\flow-sl-normal.ico"
-tray_icon_normal            := ".\FLOW\icons\leaf\myleaf.ico"
-tray_icon_pause_all         := ".\FLOW\icons\flow-sl-pause.ico"
-tray_icon_pause_hotkeys     := ".\FLOW\icons\flow-sl-pause.ico"
-tray_icon_pause_hotstrings  := ".\FLOW\icons\flow-sl-pause-hs.ico"
-tray_icon_suspend           := ".\FLOW\icons\flow-sl-suspend.ico"
-traymenu_icon_checked       := ".\FLOW\icons\flow_checked.ico"
-traymenu_icon_unchecked     := ".\FLOW\icons\flow_unchecked.ico"
+; tray_icon_normal            := ".\media\icons\flow-sl-normal.ico"
+tray_icon_normal            := ".\media\icons\leaf.ico"
+tray_icon_pause_all         := ".\media\icons\flow-sl-pause.ico"
+tray_icon_pause_hotkeys     := ".\media\icons\flow-sl-pause.ico"
+tray_icon_pause_hotstrings  := ".\media\icons\flow-sl-pause-hs.ico"
+tray_icon_suspend           := ".\media\icons\flow-sl-suspend.ico"
+traymenu_icon_checked       := ".\media\icons\flow_checked.ico"
+traymenu_icon_unchecked     := ".\media\icons\flow_unchecked.ico"
 
 ; custom tray menu items
 trayitem_flow_ref             := "Tetrakeys Shortcut Keys"
-trayitem_flow_ref_ico         := ".\FLOW\icons\flow-sl-normal.ico"
-trayitem_flow_ref_ico         := ".\FLOW\icons\flow_keeb.ico"
+trayitem_flow_ref_ico         := ".\media\icons\flow-sl-normal.ico"
+trayitem_flow_ref_ico         := ".\media\icons\flow_keeb.ico"
 trayitem_about                := "About FLOW Streamline"
 trayitem_about_ico            := tray_icon_normal
 trayitem_reload               := "&Reload Script`t[Ctrl+Win+Alt]+[R]"
-trayitem_reload_ico           := ".\FLOW\icons\flow_reload.ico"
+trayitem_reload_ico           := ".\media\icons\flow_reload.ico"
 trayitem_toggle_hstrings      := "Aux Hot&Strings`t[Ctrl+Win+Alt]+[S]"
 trayitem_toggle_hstrings_ico  := traymenu_icon_checked
 trayitem_toggle_hkeys         := "Aux Hot&Keys`t[Ctrl+Win+Alt]+[K]"
 trayitem_toggle_hkeys_ico     := traymenu_icon_checked
 trayitem_debug                := "Debug Tools"
-trayitem_debug_ico            := ".\FLOW\icons\flow_debug.ico"
+trayitem_debug_ico            := ".\media\icons\flow_debug.ico"
 trayitem_ahkhelp              := "AutoHotkey Help`t[Ctrl+Win+Alt]+[F2]"
-trayitem_ahkhelp_ico          := ".\FLOW\icons\flow_help.ico"
+trayitem_ahkhelp_ico          := ".\media\icons\flow_help.ico"
 trayitem_exit                 := "E&xit FLOW Streamline"
-trayitem_exit_ico             := ".\FLOW\icons\flow_stop.ico"
+trayitem_exit_ico             := ".\media\icons\flow_stop.ico"
 trayitem_edit                 := "E&dit Script`t[Ctrl+Win+Alt]+[E]"
-trayitem_edit_ico             := ".\FLOW\icons\flow_edit.ico"
+trayitem_edit_ico             := ".\media\icons\flow_edit.ico"
 trayitem_runatstartup         := "Run at Startup"
 
 this_script_shorcut    := A_Startup "\" SubStr(A_ScriptName, 1, StrLen(A_ScriptName) - 4) ".lnk"
@@ -283,7 +283,7 @@ SuspendHotkeys(*)
   Suspend -1 ; toggle suspend
 
   if A_IsSuspended = true
-    TraySetIcon ".\FLOW\FLOW_tray_dark_pause.ico"
+    TraySetIcon ".\media\FLOW_tray_dark_pause.ico"
   else
     Tray.Default := "TestDefault"
 }

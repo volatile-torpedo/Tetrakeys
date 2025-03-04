@@ -30,12 +30,12 @@ LaunchTime := FormatTime()
 ╰────────────────────────╯
 */
 global process_theme := ""
-global app_ico := ".\FLOW\icons\leaf.ico"
+global app_ico := ".\media\icons\leaf.ico"
 global toggle_sound_file_startrun := A_Windir "\Media\Windows Unlock.wav"
-global toggle_sound_file_enabled := ".\FLOW\sounds\01_enable.wav"
-global toggle_sound_file_disabled := ".\FLOW\sounds\01_disable.wav"
-global sound_file_start := ".\FLOW\sounds\start-13691.wav"
-global sound_file_stop := ".\FLOW\sounds\stop-13692.wav"
+global toggle_sound_file_enabled := ".\media\sounds\01_enable.wav"
+global toggle_sound_file_disabled := ".\media\sounds\01_disable.wav"
+global sound_file_start := ".\media\sounds\start-13691.wav"
+global sound_file_stop := ".\media\sounds\stop-13692.wav"
 global regkey_sticky_keys := "HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys"
 
 
@@ -56,16 +56,16 @@ DisplayShorcutKeys(ItemName, ItemPos, Tray, Popup_Seconds := 0)
       )"
   MsgBox HelpMessage, "FLOW Shortcut Keys", "Iconi 4096"
   */
-  img_alt_key := ".\FLOW\keys\alt_key.ico"
-  img_ctrl_key := ".\FLOW\keys\ctrl_key.ico"
-  img_lshift_key := ".\FLOW\keys\shiftl_key.png"
-  img_rshift_key := ".\FLOW\keys\shiftr_key.png"
-  img_b_key := ".\FLOW\keys\b_key.ico"
-  img_e_key := ".\FLOW\keys\e_key.ico"
-  img_n_key := ".\FLOW\keys\n_key.ico"
-  img_r_key := ".\FLOW\keys\r_key.ico"
-  img_t_Key := ".\FLOW\keys\t_key.ico"
-  img_win_key := ".\FLOW\keys\win_key.ico"
+  img_alt_key := ".\media\keys\alt_key.ico"
+  img_ctrl_key := ".\media\keys\ctrl_key.ico"
+  img_lshift_key := ".\media\keys\shiftl_key.png"
+  img_rshift_key := ".\media\keys\shiftr_key.png"
+  img_b_key := ".\media\keys\b_key.ico"
+  img_e_key := ".\media\keys\e_key.ico"
+  img_n_key := ".\media\keys\n_key.ico"
+  img_r_key := ".\media\keys\r_key.ico"
+  img_t_Key := ".\media\keys\t_key.ico"
+  img_win_key := ".\media\keys\win_key.ico"
 
   SKey_Ref_UI := Gui("+MinSize600x400", "FLOW - Core Shortcut Keys")
   SKey_Ref_UI.Opt("+AlwaysOnTop -SysMenu +Theme +MinSize600x400")  ; +Owner avoids a taskbar button.
@@ -289,14 +289,14 @@ LAlt & t::
   }
 }
 ; ╭────────────────────────────╮
-; │  QWIK KEYS (QWIKEY)        │
+; │  QWIK KEYS (CapsLock)      │
 ; │  [Ctrl]+[Alt]+[Win] + [?]  │
 ; ├────────────────────────────┴───────────────────────╮
-; │  [QWIKEY]+[K]    Toggle Aux Hotkeys                │
-; │  [QWIKEY]+[S]    Toggle Aux Hotsrings              │
-; │  [QWIKEY]+[R]    Reload this app                   │
-; │  [QWIKEY]+[E]    Edit this AHK (default editor)    │
-; │  [QWIKEY]+[F2]   AutoHotKey Help File              │
+; │  [CapsLock]+[K]    Toggle Aux Hotkeys              │
+; │  [CapsLock]+[S]    Toggle Aux Hotsrings            │
+; │  [CapsLock]+[R]    Reload this app                 │
+; │  [CapsLock]+[E]    Edit this AHK (default editor)  │
+; │  [CapsLock]+[F2]   AutoHotKey Help File            │
 ; ╰────────────────────────────────────────────────────╯
 
 ; [Ctrl]+[Alt]+[Win]+[K]: Toggle Aux Hotkeys
@@ -341,20 +341,20 @@ LAlt & t::
 ; │  [c] CLIP UTILs     Qwik utils on the selected text     │
 ; │  [u] UTILITIES      Qwik access to utilities            │
 ; ├─────────────────────────────────────────────────────────┤
-; │  [QWIKEY]+[O], [b]   OPEN APP: Bitwarden                │
-; │  [QWIKEY]+[O], [c]   OPEN APP: ✓ VS Code                │
-; │  [QWIKEY]+[O], [d]   OPEN APP: Dev Tools                │
-; │  [QWIKEY]+[O], [h]   OPEN APP: Dev Home                 │
-; │  [QWIKEY]+[O], [n]   OPEN APP: ✓ Notepad                │
-; │  [QWIKEY]+[O], [p]   OPEN APP: ✓ Epic Pen               │
-; │  [QWIKEY]+[O], [w]   OPEN APP: Terminal (WSL)           │
+; │  [CapsLock]+[o], [b]   OPEN APP:                 (none) │
+; │  [CapsLock]+[o], [c]   OPEN APP: VS Code            [x] │
+; │  [CapsLock]+[o], [d]   OPEN APP: Dev Tools              │
+; │  [CapsLock]+[o], [h]   OPEN APP: Dev Home               │
+; │  [CapsLock]+[o], [n]   OPEN APP: Notepad            [x] │
+; │  [CapsLock]+[o], [p]   OPEN APP: Epic Pen           [x] │
+; │  [CapsLock]+[o], [w]   OPEN APP: Wezterm                │
 ; │                                                         │
-; │  [QWIKEY]+[b], [c]   BROWSE: chat.openai.com            │
-; │  [QWIKEY]+[b], [d]   BROWSE: dev.azure.com              │
-; │  [QWIKEY]+[b], [g]   BROWSE: github.com                 │
-; │  [QWIKEY]+[b], [i]   BROWSE: icons8.com                 │
-; │  [QWIKEY]+[b], [p]   BROWSE: portal.azure.com           │
-; │  [QWIKEY]+[b], [y]   BROWSE: youtube.com                │
+; │  [CapsLock]+[b], [c]   BROWSE: chat.openai.com          │
+; │  [CapsLock]+[b], [d]   BROWSE: dev.azure.com            │
+; │  [CapsLock]+[b], [g]   BROWSE: github.com               │
+; │  [CapsLock]+[b], [i]   BROWSE: icons8.com               │
+; │  [CapsLock]+[b], [p]   BROWSE: portal.azure.com         │
+; │  [CapsLock]+[b], [y]   BROWSE: youtube.com              │
 ; │                                                         │
 ; ╰─────────────────────────────────────────────────────────╯
 
@@ -372,6 +372,21 @@ KeyWaitAny(*)
   return ih.EndKey  ; Return the key name
 }
 
+SplashGUI(message, timeout) {
+  WiseGui("TetraKeySplash"
+  , "Margins:       3,3,0,4"
+  ; , "Theme:,,," . LoadPicture(A_AhkPath, "Icon1", &ImageType)
+  , "Theme:,,,"  LoadPicture(app_ico, "Icon1", &ImageType)
+  , "FontMain:     S14, Arial"
+  , "MainText:     " message
+  ; , "FontSub:      S14, Consolas"
+  ; , "SubText:" . A_AhkVersion
+  , "SubAlign:     +1"
+  ; , "Show:         Fade@400ms"
+  , "Hide:         Fade@1000ms"
+  , "Timer:        2000"
+  )
+}
 CapsLock & o::
 {
   ; If GetKeyState("CapsLock", "P")
@@ -379,30 +394,44 @@ CapsLock & o::
   ;   ; Open App Mode, then follow it with another key to complete the CHORD
   KeyWait "CapsLock"
   retKeyHook := KeyWaitAny()
-  MsgBox "You pressed " retKeyHook, "Tetrakeys", "T2 4096"
-  Switch retKeyHook
-  {
-    Case "b":
-      Run "bitwarden"
-    Case "c":
+  ; MsgBox "You pressed " retKeyHook, "Tetrakeys", "T2 4096"
+  ; random_string := "LaunchNotion"
+  ; action_array := (retKeyHook = "b") ? (["Bitwarden", "run", "bitwarden"]) 
+  ;              :  (retKeyHook = "c") ? (["VS Code", "run", "code.cmd"])
+  ;              :  (retKeyHook = "n") ? (["Notion", "function", "LaunchNotion()"])
+  ;              :  (["Defaul", "doNothing", ""])
+
+  If (retKeyHook = "c") {
+      SplashGUI("Starting VS Code...", 2000)
       Run "code.cmd"
-    Case "n":
-      LaunchNotion()
-    Case "o":
-    Case "p":
-      Run EnvGet("ProgramFiles(x86)") "\Epic Pen\EpicPen.exe"
-    Case "D":
-      Run "devtools"
-    Case "H":
-      Run "devhome"
-    Default:
-      ; do nothing
   }
-  ; }
-  ; Else
-  ; {
-  ;   Send "O" ; This is to respond to [LShift}+[o]; otherwise, nothing will be sent
-  ; }
+  Else If (retKeyHook = "e") {
+    SplashGUI("Starting Epic Pen...", 2000)
+    Run EnvGet("ProgramFiles(x86)") "\Epic Pen\EpicPen.exe"
+  }
+  Else If (retKeyHook = "n") {
+    SplashGUI("Starting Notion...", 2000)
+    LaunchNotion()
+  }
+  Else If (retKeyHook = "o") {
+    SplashGUI("Starting MS Outlook...", 2000)
+    Send "^!+#o"
+  }
+  Else If (retKeyHook = "p") {
+    SplashGUI("Starting MS PowerPoint...", 2000)
+    Send "^!+#p"
+  }
+  Else If (retKeyHook = "w") {
+      SplashGUI("Starting MS Word...", 2000)
+      Send "^!+#w"
+  }
+  Else If (retKeyHook = "x") {
+    SplashGUI("Starting MS Excel...", 2000)
+    Send "^!+#x"
+  }
+  Else {
+    Send "O" ; This is to respond to [LShift}+[o]; otherwise, nothing will be sent
+  }
 }
 
 ; [Win]+[F] to open the File Explorer in the user's Documents folder
